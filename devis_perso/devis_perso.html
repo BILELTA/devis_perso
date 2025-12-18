@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Devis personnalisé</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+  <h1>Générateur de Devis personnalisés</h1>
+<div class="category">
+    <h3><span class="service-title">Services personnalisés</span> <span class="service-indication">(Prix **HT** - La TVA sera appliquée lors de la génération)</span></h3>
+    
+    <div style="display: flex; align-items: flex-start;">
+        
+        <div id="servicesContainer" style="flex-grow: 1;">
+              <div class="option" style="display: flex; align-items: center; margin-top: 10px;">
+                <input type="text" class="service-input category-input" placeholder="Catégorie">
+                <input type="text" class="service-input" placeholder="Option">
+                <input type="text" class="price-input" style="width: 80px;" placeholder="Prix HT (€)">
+                <input type="number" class="quantity-input" min="1" value="1" placeholder="Qté">
+                <button class="add-button" onclick="addNewService()">+</button>
+                <button class="delete-button" onclick="removeService(event)">-</button>
+                
+              </div>
+        </div>
+      </div>
+    
+    <div id="realTimeTotalContainer" style="margin-top: 20px; padding: 15px; background-color: #ecf0f1; border-radius: 4px; border: 1px solid #ddd; text-align: right;">
+        <strong style="font-size: 1.1em;">Total HT Actuel : </strong><span id="realTimeTotal" style="font-size: 1.1em; font-weight: bold; color: #3498DB;">0,00 €</span>
+    </div>
+</div>
+
+  <button id="showDevisDialogButton" class="button-next" style="margin-top: 10px;">Générer le devis</button>
+
+  <div id="devisDialogOverlay" class="dialog-overlay" style="display: none;">
+      <div class="dialog-content">
+        <span class="close-button" onclick="closeDevisDialog()">&times;</span>
+        <h2>Informations du Devis</h2>
+
+        <div class="tabs-container">
+          <button class="tab-button active" data-tab="tabSeller">Émetteur & Logo</button>
+          <button class="tab-button" data-tab="tabDetails">Détails du Devis</button>
+          <button class="tab-button" data-tab="tabClient">Informations Client</button>
+          <button class="tab-button" data-tab="tabTaxes">TVA & Conditions</button>
+        </div>
+
+        <div id="tabSeller" class="tab-content active">
+          <h3 style="font-size: 1.2em; margin-bottom: 10px;">Informations Émetteur (Votre Société)</h3>
+
+          <label for="logoFileInput">Importer le Logo (PNG, JPG, max 500ko) :</label>
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg" style="padding-top: 15px; padding-bottom: 15px;">
+          <div id="logoPreview" style="margin-top: 10px; margin-bottom: 15px; text-align: center;"></div>
+          
+          <hr style="margin: 20px 0;">
+
+          <label for="sellerName">Nom de la Société / Personne :</label>
+          <input type="text" id="sellerName" placeholder="Ex: SAS Ma Société" required>
+
+          <label for="sellerAddress" style="margin-top: 10px;">Adresse :</label>
+          <input type="text" id="sellerAddress" placeholder="Ex: 50 avenue des Champs" required>
+          
+          <label for="sellerCity" style="margin-top: 10px;">Ville et Code Postal :</label>
+          <input type="text" id="sellerCity" placeholder="Ex: 75008 Paris" required>
+          
+          <label for="sellerSiret" style="margin-top: 10px;">N° SIRET / N° TVA Intracom. :</label>
+          <input type="text" id="sellerSiret" placeholder="Ex: 987 654 321 00010 (SIRET)" required>
+        </div>
+        
+        <div id="tabDetails" class="tab-content">
+          <h3 style="font-size: 1.2em; margin-bottom: 10px;">Numérotation, Date et Intitulé</h3>
+          
+          <label for="devisNumberCustom">Numéro du Devis (modifiable) :</label>
+          <input type="number" id="devisNumberCustom" min="1" required>
+
+          <label for="devisDate" style="margin-top: 10px;">Date du Devis :</label>
+          <input type="text" id="devisDate" placeholder="Sélectionner la date" required>
+
+          <label for="devisTitle" style="margin-top: 10px;">Intitulé du Devis :</label>
+          <input type="text" id="devisTitle" placeholder="Ex: Migration Cloud 2025" required>
+        </div>
+
+        <div id="tabClient" class="tab-content">
+          <h3 style="font-size: 1.2em; margin-bottom: 10px;">Informations Client (Obligatoires)</h3>
+
+          <label for="clientName">Nom de la Société / Personne :</label>
+          <input type="text" id="clientName" placeholder="Ex: SARL Dupont" required>
+
+          <label for="clientAddress" style="margin-top: 10px;">Adresse :</label>
+          <input type="text" id="clientAddress" placeholder="Ex: 12 rue de la Paix" required>
+          
+          <label for="clientCity" style="margin-top: 10px;">Ville et Code Postal :</label>
+          <input type="text" id="clientCity" placeholder="Ex: 75001 Paris" required>
+
+          <label for="clientSiret" style="margin-top: 10px;">N° SIRET / N° TVA Intracom. :</label>
+          <input type="text" id="clientSiret" placeholder="Ex: 123 456 789 00010 (SIRET)" required>
+        </div>
+
+        <div id="tabTaxes" class="tab-content">
+          <h3 style="font-size: 1.2em; margin-bottom: 10px;">Rabais et Taux de TVA</h3>
+          
+          <label for="discountValue" style="margin-top: 10px;">Rabais / Réduction :</label>
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+              <input type="number" id="discountValue" value="0" min="0" step="0.01" style="width: 60%; margin-right: 10px; margin-bottom: 0;">
+              <select id="discountType" style="width: 40%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                  <option value="euro">€ (Montant Fixe)</option>
+                  <option value="percent">% (Pourcentage)</option>
+              </select>
+          </div>
+          
+          <label for="tvaRate" style="margin-top: 10px;">Taux de TVA (%) :</label>
+          <input type="number" id="tvaRate" value="20" min="0" max="100" step="0.1" required>
+
+          <hr style="margin: 20px 0;">
+          <h3 style="font-size: 1.2em; margin-bottom: 10px;">Conditions de Paiement & Mentions Légales</h3>
+          <label for="customConditions"></label>
+          <textarea id="customConditions" rows="4" placeholder="Ex: Conditions de paiement : 30 jours net. Validité de l'offre : 30 jours."></textarea>
+        </div>
+        
+        <div id="generateButtonContainer" style="position: sticky; bottom: 0; background-color: #fff; padding: 15px 0 0 0; border-top: 1px solid #ddd; text-align: center; z-index: 10;">
+          <button class="button-next" onclick="generateDevisFinal()">Générer et Télécharger le PDF</button>
+        </div>
+      </div>
+  </div>
+
+  <script src="script_devis_perso.js"></script>
+  <script>
+      // Initialisation de Flatpickr pour le champ de date
+      flatpickr("#devisDate", {
+          dateFormat: "d/m/Y",
+          defaultDate: new Date()
+      });
+
+      // --- Fonctions de la Modale/Persistance (Déplacées ici pour éviter les erreurs de dépendance) ---
+      function loadSellerData() {
+          const sellerDataJson = localStorage.getItem('sellerData');
+          if (sellerDataJson && document.getElementById('sellerName')) {
+              try {
+                  const sellerData = JSON.parse(sellerDataJson);
+                  document.getElementById('sellerName').value = sellerData.name || '';
+                  document.getElementById('sellerAddress').value = sellerData.address || '';
+                  document.getElementById('sellerCity').value = sellerData.city || '';
+                  document.getElementById('sellerSiret').value = sellerData.siret || '';
+              } catch (e) { console.error("Erreur de chargement des données de l'émetteur:", e); }
+          }
+      }
+      function loadConditions() {
+          const conditions = localStorage.getItem('customConditions');
+          if (conditions && document.getElementById('customConditions')) {
+              document.getElementById('customConditions').value = conditions;
+          }
+      }
+      
+      // Logique d'ouverture de modale
+      function openDevisDialog() {
+          loadSellerData(); 
+          loadConditions(); 
+          document.getElementById('devisDialogOverlay').style.display = 'flex';
+          // Active le premier onglet à l'ouverture
+          const firstTab = document.querySelector('.tabs-container button');
+          if (firstTab) firstTab.click();
+      }
+
+      function closeDevisDialog() {
+          document.getElementById('devisDialogOverlay').style.display = 'none';
+      }
+
+      // Initialisation du numéro de devis
+      let lastDevisNumber = localStorage.getItem('devisNumber') || 0;
+      document.getElementById('devisNumberCustom').value = parseInt(lastDevisNumber) + 1;
+
+      // Événement pour ouvrir la modale
+      document.getElementById('showDevisDialogButton').addEventListener('click', () => {
+          let currentDevisNumber = localStorage.getItem('devisNumber') || 0;
+          document.getElementById('devisNumberCustom').value = parseInt(currentDevisNumber) + 1;
+          openDevisDialog();
+      });
+      
+      // --- LOGIQUE ONGLETS ET APERÇU LOGO ET TOTAL EN TEMPS RÉEL ---
+      document.addEventListener('DOMContentLoaded', () => {
+          const tabButtons = document.querySelectorAll('.tab-button');
+          const logoFileInput = document.getElementById('logoFileInput');
+          const logoPreview = document.getElementById('logoPreview');
+          
+          // Logique d'affichage des Onglets
+          tabButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const targetTabId = this.getAttribute('data-tab');
+
+                  tabButtons.forEach(btn => btn.classList.remove('active'));
+                  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                  this.classList.add('active');
+                  document.getElementById(targetTabId).classList.add('active');
+              });
+          });
+          
+          // Logique d'Aperçu du Logo
+          if(logoFileInput) {
+              logoFileInput.addEventListener('change', function(event) {
+                  const file = event.target.files[0];
+                  logoPreview.innerHTML = ''; 
+
+                  if (file) {
+                      const reader = new FileReader();
+                      reader.onload = function(e) {
+                          const img = document.createElement('img');
+                          img.src = e.target.result;
+                          img.style.maxWidth = '100px'; 
+                          img.style.maxHeight = '100px';
+                          img.style.border = '1px solid #ddd';
+                          img.style.padding = '5px';
+                          img.style.borderRadius = '4px';
+                          logoPreview.appendChild(img);
+                      };
+                      reader.readAsDataURL(file);
+                  }
+              });
+          }
+          
+          // --- NOUVEAU : Écouteurs pour le calcul en temps réel (pour les lignes existantes) ---
+          const allServiceInputs = document.querySelectorAll('#servicesContainer input.service-input, #servicesContainer input.price-input, #servicesContainer input.quantity-input');
+          
+          allServiceInputs.forEach(input => {
+              input.addEventListener('input', updateRealTimeTotal);
+          });
+          
+          // Initialise le total au chargement de la page
+          updateRealTimeTotal(); 
+      });
+  </script>
+
+</body>
+</html>
