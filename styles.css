@@ -1,0 +1,424 @@
+/* Réinitialisation des styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Style général pour le corps de la page */
+body {
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 40px;
+}
+
+.logo-container {
+  position: absolute;
+  top: 35px;
+  right: 50px;
+}
+
+.logo-container img {
+  width: 100px;
+  height: auto;
+}
+
+
+.container {
+  display: flex;
+}
+
+.container .column {
+  flex: 1;
+}
+
+/* En-tête principale */
+h1 {
+  font-size: 2.5em;
+  font-weight: 300;
+  margin-bottom: 30px;
+  color: #2C3E50;
+}
+
+/* Sous-en-tête */
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  font-weight: 300;
+  color: #34495E;
+}
+
+/* Style de la catégorie de conteneur */
+.category {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style d'information */
+.information_ipv4 {
+  color: #7f8c8d;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+/* Style pour la classe Rocade */
+.Rocade {
+  color: #2c3e50;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* Style pour les options */
+.option {
+  margin-bottom: 20px;
+}
+
+.option span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #7f8c8d;
+}
+
+/* Champ de saisie de la quantité */
+.quantity-input {
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+/* Style pour le bouton */
+.button-next {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 500;
+  border: none;
+  background: #3498DB;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de survol du bouton */
+.button-next:hover {
+  background-color: #2980B9;
+  color: #ffffff;
+}
+
+
+/* Style pour le bouton "Générer le devis" */
+.button-generate {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 500;
+  border: none;
+  background: #3498DB;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de survol du bouton */
+.button-generate:hover {
+  background-color: #2980B9;
+  transform: scale(1.05);
+}
+
+/* Correction de la couleur du texte et des bordures */
+.button-next,
+.button-generate {
+  color: #ffffff;
+  border: none;
+  outline: none;
+}
+
+
+/* MODALE (DIALOG) STYLES */
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Assurez-vous qu'il est au-dessus du reste */
+}
+
+.dialog-content {
+  background-color: #ffffff;
+  padding: 30px; /* Augmenté pour un meilleur espacement interne */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 450px; /* Augmentation de la largeur maximale */
+  width: 90%;
+  max-height: 90vh; /* Nouvelle: Limite la hauteur à 90% de la hauteur de la fenêtre */
+  overflow-y: auto; /* Nouvelle: Permet le défilement vertical si le contenu dépasse */
+  position: relative;
+}
+
+.dialog-content label {
+  display: block;
+  margin-bottom: 5px; /* Réduit la marge pour un meilleur usage de l'espace */
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.dialog-content input[type="text"],
+.dialog-content input[type="date"],
+.dialog-content input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px; /* Ajout d'une marge sous chaque champ */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; 
+}
+
+.dialog-content .close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.dialog-content .close-button:hover {
+  color: red;
+}
+
+/* Centre le bouton "Générer et Imprimer" dans la modale */
+.dialog-content button.button-next {
+  margin: 20px auto 0 auto;
+  display: block;
+  width: 100%;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.invalid-input {
+  border: 2px solid red !important;
+}
+
+
+/* STYLES DEVIS IMPRIMÉ (Pour la fenêtre d'impression) */
+.align-right {
+  text-align: right !important;
+}
+
+.devis-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.devis-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.category-cell {
+  font-weight: bold;
+}
+
+.service-title {
+  font-size: 1.2em;
+}
+
+/* Style pour le bouton d'ajout de service personnalisé */
+.category-input {
+  margin-right: 10px;
+}
+
+.add-button,
+.delete-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+}
+
+
+/* Espacement entre les champs du service personnalisé */
+.service-input, .price-input, .quantity-input {
+  margin-right: 10px;
+}
+
+/* Alignement du texte de service personnalisé */
+.service-label {
+  margin-right: 10px;
+}
+
+.service-indication {
+  font-size: 10px;
+  color: #999;
+  margin-left: 5px;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.links {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.links a {
+  display: inline-block;
+  margin-right: 10px;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 8px 16px;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.links a:hover {
+  background-color: #f2f2f2;
+}
+
+.delete-button {
+  font-size: 16px;
+  padding: 5px 8px;
+  margin-left: 10px;
+  background-color: #ff5a5a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #ff4040;
+}
+
+/* --- STYLES POUR LA MODALE À ONGLETS (TABS) --- */
+
+/* Conteneur des boutons d'onglets */
+.tabs-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0;
+}
+
+/* Style des boutons d'onglets */
+.tab-button {
+    flex-grow: 1; 
+    padding: 10px 5px; /* Réduit le padding pour plus d'espace sur la largeur */
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 3px solid transparent; 
+    transition: all 0.2s ease;
+    font-size: 13px; /* Réduit la taille de la police */
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+}
+
+/* Survol des boutons */
+.tab-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Style de l'onglet actif */
+.tab-button.active {
+    background-color: #ffffff;
+    border-bottom: 3px solid #3498DB; /* Couleur principale pour l'onglet actif */
+    color: #3498DB;
+}
+
+/* Conteneur du contenu de l'onglet */
+.tab-content {
+    display: none; /* Cache tous les contenus par défaut */
+    padding: 15px 0;
+}
+
+/* Affichage du contenu de l'onglet actif */
+.tab-button.active {
+    background-color: #ffffff;
+    border-bottom: 3px solid #3498DB; 
+    color: #3498DB;
+}
+
+/* Conteneur du contenu de l'onglet */
+.tab-content {
+    display: none; 
+    padding: 15px 0;
+}
+
+/* Affichage du contenu de l'onglet actif */
+.tab-content.active {
+    display: block; 
+}
+
+/* Amélioration de l'esthétique du contenu de la modale */
+.dialog-content {
+    /* ... (Vos styles existants, assurez-vous que la hauteur n'est pas trop contrainte) ... */
+    max-height: 90vh; /* Permet un grand espace de travail */
+    overflow-y: auto; /* Active le défilement si le contenu dépasse */
+}
+
+/* Style pour la zone du bouton final */
+#generateButtonContainer {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    padding: 15px 0 0 0;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    z-index: 10;
+}
